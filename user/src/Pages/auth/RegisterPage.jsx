@@ -16,10 +16,9 @@ const RegisterPage = () => {
   const handleSignUp = (e) => {
     e.preventDefault();
 
-    // Simulasi proses pendaftaran
     setTimeout(() => {
       alert("Account created successfully!");
-      navigate("/homepage"); // Arahkan ke halaman HomePage
+      navigate("/homepage"); 
     }, 500);
   };
 
