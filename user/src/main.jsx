@@ -6,6 +6,7 @@ import RegisterPage from "./Pages/auth/RegisterPage";
 import "./index.css";
 import Dashboard from "./Pages/Dashboard";
 import HomePage from "./Pages/HomePage";
+import DataPatient from "./Pages/DataPatient";
 
 const NotFoundPage = () => {
   return (
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: "/HomePage",
     element: <HomePage />,
+  },
+  {
+    path: "/DataPatient",
+    element: <DataPatient />,
   },
 ]);
 

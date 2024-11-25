@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -9,17 +10,6 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const dummyUsers = [
-    {
-      email: "user@example.com",
-      password: "password123",
-    },
-    {
-      email: "admin@example.com",
-      password: "admin123",
-    },
-  ];
-
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
@@ -27,19 +17,24 @@ const LoginPage = () => {
     }, 2000);
   }, []);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
 
-    const user = dummyUsers.find(
-      (u) => u.email === email && u.password === password
-    );
+    try {
+      const response = await axios.post("http://localhost:5000/auth/login", {
+        email,
+        password,
+      });
 
-    if (user) {
-      localStorage.setItem("token", "dummy-token");
+      localStorage.setItem("token", response.data.token);
       navigate("/HomePage");
-    } else {
-      setError("Invalid email or password. Please try again.");
+    } catch (err) {
+      if (err.response) {
+        setError(err.response.data.message);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     }
   };
 

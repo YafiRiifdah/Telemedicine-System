@@ -96,7 +96,7 @@ const Dashboard = () => {
         setTimeout(() => {
             setIsLoading(false);
             setIsVisible(true);
-        }, 2000); // Simulasi loading selama 2 detik
+        }, 2000);
     }, []);
 
     const toggleSidebar = () => {
