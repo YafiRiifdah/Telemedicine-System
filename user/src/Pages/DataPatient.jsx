@@ -51,29 +51,28 @@ const DataPatient = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // Simulate loading effect
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500); // Loading duration
+    }, 1500);
     return () => clearTimeout(timer);
   }, []);
 
-  // UseInView hook for animation
-  const { ref: cardRef, inView: cardInView } = useInView({ triggerOnce: true });
-  const { ref: chartRef, inView: chartInView } = useInView({ triggerOnce: true });
-  const { ref: tableRef, inView: tableInView } = useInView({ triggerOnce: true });
+  const { ref: imageRef, inView: imageInView } = useInView();
+  const { ref: cardRef, inView: cardInView } = useInView();
+  const { ref: chartRef, inView: chartInView } = useInView();
+  const { ref: tableRef, inView: tableInView } = useInView();
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600"></div>
+      <div className="flex justify-center items-center min-h-screen bg-blue-600">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-white"></div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen flex">
+    <div className="bg-gray-50 min-h-screen flex flex-col">
       {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
@@ -99,8 +98,13 @@ const DataPatient = () => {
           </button>
         </header>
 
-        {/* Image */}
-        <div className="relative">
+        {/* Image Section */}
+        <div
+          ref={imageRef}
+          className={`relative transition-transform duration-1000 ease-in-out ${
+            imageInView ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-10 scale-95"
+          }`}
+        >
           <img
             src={img2}
             alt="Header Image"
@@ -110,10 +114,10 @@ const DataPatient = () => {
 
         {/* Cards Section */}
         <section
+          ref={cardRef}
           className={`p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-1000 ${
             cardInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
-          ref={cardRef}
         >
           <Cards
             title="Total Patients"
@@ -137,10 +141,10 @@ const DataPatient = () => {
 
         {/* Weekly Overview Chart */}
         <div
+          ref={chartRef}
           className={`px-8 transition-all duration-1000 ${
             chartInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
-          ref={chartRef}
         >
           <Chart />
         </div>
@@ -155,10 +159,10 @@ const DataPatient = () => {
           </button>
         </div>
         <div
+          ref={tableRef}
           className={`overflow-hidden transition-all duration-1000 ease-in-out ${
             isTableVisible ? "max-h-[800px] opacity-100 scale-100" : "max-h-0 opacity-0 scale-95"
           }`}
-          ref={tableRef}
         >
           <div className="overflow-x-auto px-8">
             <table className="w-full border-collapse mt-6 bg-white shadow-lg rounded-lg">
