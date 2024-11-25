@@ -11,7 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
-
+/backend/node_modules/
+/user/node_modules/
+.DS_Store
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
