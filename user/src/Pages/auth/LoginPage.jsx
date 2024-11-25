@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -8,6 +7,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,21 +20,27 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setIsSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/auth/login", {
-        email,
-        password,
+      const response = await fetch("http://localhost:8080/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
-      localStorage.setItem("token", response.data.token);
-      navigate("/HomePage");
-    } catch (err) {
-      if (err.response) {
-        setError(err.response.data.message);
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        navigate("/HomePage");
       } else {
-        setError("Something went wrong. Please try again.");
+        setError(data.message || "Failed to log in");
       }
+    } catch (err) {
+      setError("Server error. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -114,9 +120,10 @@ const LoginPage = () => {
               </div>
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
               >
-                Sign In
+                {isSubmitting ? "Signing In..." : "Sign In"}  {/* Update button text */}
               </button>
             </form>
             <p className="text-sm text-center text-gray-600 mt-6">
