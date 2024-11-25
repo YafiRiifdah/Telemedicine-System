@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Line } from "react-chartjs-2";
-
+import Sidebar from "../components/Sidebar";
 import {
     Chart as ChartJS,
     LineElement,
@@ -22,47 +22,6 @@ ChartJS.register(
     Tooltip,
     Legend
 );
-
-const Sidebar = ({ isOpen, toggleSidebar }) => {
-    const features = [
-        { title: "Data Demografi", icon: "person" },
-        { title: "Pemeriksaan", icon: "science" },
-        { title: "Appointment", icon: "event" },
-        { title: "Jadwal Dokter", icon: "schedule" },
-    ];
-
-    return (
-        <>
-            {isOpen && (
-                <div
-                    className="fixed inset-0 bg-black opacity-50 z-10"
-                    onClick={toggleSidebar}
-                ></div>
-            )}
-
-            <div
-                className={`fixed z-20 top-0 left-0 h-full w-64 bg-gradient-to-b from-blue-600 to-blue-800 text-white shadow-lg transform ${isOpen ? "translate-x-0" : "-translate-x-full"
-                    } transition-transform duration-300`}
-            >
-                <div className="p-6 text-2xl font-bold border-b border-blue-500">
-                    <span className="text-white">Hospital Dashboard</span>
-                </div>
-                <nav className="flex-1 p-6 space-y-4">
-                    {features.map((feature, index) => (
-                        <button
-                            key={index}
-                            onClick={() => alert(`${feature.title} akan ditampilkan di sini.`)}
-                            className="flex items-center gap-4 px-4 py-2 w-full text-left rounded-lg hover:bg-blue-700"
-                        >
-                            <span className="material-icons-outlined">{feature.icon}</span>
-                            {feature.title}
-                        </button>
-                    ))}
-                </nav>
-            </div>
-        </>
-    );
-};
 
 const HomePage = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -208,14 +167,7 @@ const HomePage = () => {
                 {/* Modal */}
                 {isModalOpen && (
                     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                        <div
-                            className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 transform transition-all duration-500 scale-100 opacity-100 animate-modal-enter"
-                            onAnimationEnd={(e) => {
-                                if (e.animationName === "modal-exit") {
-                                    setIsModalOpen(false);
-                                }
-                            }}
-                        >
+                        <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
                             <h2 className="text-xl font-bold mb-4 text-gray-700">Our Services</h2>
                             <ul className="list-disc list-inside text-gray-600 space-y-2">
                                 <li>Outpatient Services</li>
@@ -236,10 +188,8 @@ const HomePage = () => {
                     </div>
                 )}
 
-
                 {/* Cards and Chart Section */}
                 <section className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {/* Cards */}
                     <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
                         <h2 className="text-lg font-bold text-gray-700">Total Patients</h2>
                         <span className="text-4xl font-bold text-blue-600 mt-4">1,245</span>
@@ -258,7 +208,6 @@ const HomePage = () => {
                         <p className="text-gray-500 mt-2">On Duty</p>
                     </div>
 
-                    {/* Chart */}
                     <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white shadow-lg rounded-lg flex justify-center items-center p-8">
                         <div style={{ height: "400px", width: "100%", maxWidth: "800px" }}>
                             <Line data={chartData} options={chartOptions} />
