@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
+import { useNavigate } from "react-router-dom";
 import img2 from "../assets/img2.svg";
 import Sidebar from "../components/Sidebar";
 import Cards from "../components/Cards";
 import Chart from "../components/Chart";
+import WeaklyChart from "../components/WeeklyChart";
 
 const patients = [
   {
@@ -39,6 +41,7 @@ const patients = [
 ];
 
 const DataPatient = () => {
+  const navigate = useNavigate();
   const [isTableVisible, setIsTableVisible] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -101,9 +104,8 @@ const DataPatient = () => {
         {/* Image Section */}
         <div
           ref={imageRef}
-          className={`relative transition-transform duration-1000 ease-in-out ${
-            imageInView ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-10 scale-95"
-          }`}
+          className={`relative transition-transform duration-1000 ease-in-out ${imageInView ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-10 scale-95"
+            }`}
         >
           <img
             src={img2}
@@ -115,9 +117,8 @@ const DataPatient = () => {
         {/* Cards Section */}
         <section
           ref={cardRef}
-          className={`p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-1000 ${
-            cardInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
+          className={`p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-1000 ${cardInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
         >
           <Cards
             title="Total Patients"
@@ -142,9 +143,8 @@ const DataPatient = () => {
         {/* Weekly Overview Chart */}
         <div
           ref={chartRef}
-          className={`px-8 transition-all duration-1000 ${
-            chartInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
+          className={`px-8 transition-all duration-1000 ${chartInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
         >
           <Chart />
         </div>
@@ -160,9 +160,8 @@ const DataPatient = () => {
         </div>
         <div
           ref={tableRef}
-          className={`overflow-hidden transition-all duration-1000 ease-in-out ${
-            isTableVisible ? "max-h-[800px] opacity-100 scale-100" : "max-h-0 opacity-0 scale-95"
-          }`}
+          className={`overflow-hidden transition-all duration-1000 ease-in-out ${isTableVisible ? "max-h-[800px] opacity-100 scale-100" : "max-h-0 opacity-0 scale-95"
+            }`}
         >
           <div className="overflow-x-auto px-8">
             <table className="w-full border-collapse mt-6 bg-white shadow-lg rounded-lg">
@@ -176,15 +175,16 @@ const DataPatient = () => {
                   <th className="py-4 px-6 text-lg text-center">Blood Type</th>
                   <th className="py-4 px-6 text-lg text-center">Phone</th>
                   <th className="py-4 px-6 text-lg text-center">Address</th>
+                  <th className="py-4 px-6 text-lg text-center">Action</th>
                 </tr>
               </thead>
+
               <tbody>
                 {patients.map((patient, index) => (
                   <tr
                     key={patient.id}
-                    className={`${
-                      index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                    } hover:bg-blue-50`}
+                    className={`${index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                      } hover:bg-blue-50`}
                   >
                     <td className="py-4 px-6 text-base text-center">{patient.id}</td>
                     <td className="py-4 px-6 text-base text-center">{patient.fullName}</td>
@@ -194,6 +194,14 @@ const DataPatient = () => {
                     <td className="py-4 px-6 text-base text-center">{patient.bloodType}</td>
                     <td className="py-4 px-6 text-base text-center">{patient.phone}</td>
                     <td className="py-4 px-6 text-base text-center">{patient.address}</td>
+                    <td className="py-4 px-6 text-base text-center">
+                    <button
+    onClick={() => navigate(`/MedicalHistory/${patient.id}`)} // Mengarahkan ke /MedicalHistory/{id}
+    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+  >
+                        Lihat Detail
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

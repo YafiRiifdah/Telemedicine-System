@@ -10,6 +10,13 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'],
+    },
+      transitionProperty: {
+        'transform': 'transform',
+        'opacity': 'opacity',
+      },
       animation: {
         "cube-rotate": "cube-rotate 1.5s infinite linear",
       },

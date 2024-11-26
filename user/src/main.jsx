@@ -7,6 +7,8 @@ import "./index.css";
 import Dashboard from "./Pages/Dashboard";
 import HomePage from "./Pages/HomePage";
 import DataPatient from "./Pages/DataPatient";
+import MedicalHistory from "./Pages/MedicalHistory";
+import Jadwal from "./Pages/Jadwal";
 
 const NotFoundPage = () => {
   return (
@@ -53,6 +55,14 @@ const router = createBrowserRouter([
     path: "/DataPatient",
     element: <DataPatient />,
   },
+  {
+    path: "/MedicalHistory/:id",
+    element: <MedicalHistory />
+  },
+  {
+    path: "/Jadwal",
+    element: <Jadwal />
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

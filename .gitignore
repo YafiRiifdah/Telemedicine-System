@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 /backend/node_modules/
+/backend/.env
 /user/node_modules/
 .DS_Store
 # Editor directories and files

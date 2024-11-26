@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Line } from "react-chartjs-2";
 import Sidebar from "../components/Sidebar";
+import { useInView } from "react-intersection-observer";
 import {
     Chart as ChartJS,
     LineElement,
@@ -26,6 +27,7 @@ ChartJS.register(
 const HomePage = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     const toggleSidebar = () => {
@@ -34,13 +36,7 @@ const HomePage = () => {
 
     const chartData = {
         labels: [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday",
+            "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
         ],
         datasets: [
             {
@@ -117,6 +113,31 @@ const HomePage = () => {
         },
     };
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 2000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    const { ref: cardsRef, inView: cardsInView } = useInView({
+        triggerOnce: true,
+        threshold: 0.5,
+    });
+
+    const { ref: chartRef, inView: chartInView } = useInView({
+        triggerOnce: false,
+        threshold: 0.5,
+    });
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-blue-600">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-white"></div>
+            </div>
+        );
+    }
+
     return (
         <div className="flex min-h-screen bg-gray-100">
             {/* Sidebar */}
@@ -165,50 +186,71 @@ const HomePage = () => {
                 </section>
 
                 {/* Modal */}
-                {isModalOpen && (
-                    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                        <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
-                            <h2 className="text-xl font-bold mb-4 text-gray-700">Our Services</h2>
-                            <ul className="list-disc list-inside text-gray-600 space-y-2">
-                                <li>Outpatient Services</li>
-                                <li>Inpatient Services</li>
-                                <li>Emergency Care</li>
-                                <li>Diagnostic Imaging</li>
-                                <li>Specialist Clinics</li>
-                            </ul>
-                            <div className="flex justify-end mt-6">
-                                <button
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                                >
-                                    Close
-                                </button>
-                            </div>
+                <div
+                    className={`fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 transition-all duration-500 ${isModalOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                        }`}
+                >
+                    <div
+                        className={`bg-white rounded-lg shadow-lg max-w-lg w-full p-6 transition-transform duration-500 ${isModalOpen ? "translate-y-0 scale-100" : "translate-y-10 scale-95"
+                            }`}
+                    >
+                        <h2 className="text-xl font-bold mb-4 text-gray-700">Our Services</h2>
+                        <ul className="list-disc list-inside text-gray-600 space-y-2">
+                            <li>Outpatient Services</li>
+                            <li>Inpatient Services</li>
+                            <li>Emergency Care</li>
+                            <li>Diagnostic Imaging</li>
+                            <li>Specialist Clinics</li>
+                        </ul>
+                        <div className="flex justify-end mt-6">
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                            >
+                                Close
+                            </button>
                         </div>
                     </div>
-                )}
+                </div>
 
                 {/* Cards and Chart Section */}
                 <section className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
+                    <div
+                        ref={cardsRef}
+                        className={`bg-white shadow-lg rounded-lg p-6 flex flex-col items-center transform transition-transform duration-1000 ease-in-out ${cardsInView ? "transform translate-y-0 opacity-100" : "transform translate-y-10 opacity-0"
+                            } hover:scale-105 hover:shadow-xl`}
+                    >
                         <h2 className="text-lg font-bold text-gray-700">Total Patients</h2>
                         <span className="text-4xl font-bold text-blue-600 mt-4">1,245</span>
                         <p className="text-gray-500 mt-2">Active Patients</p>
                     </div>
 
-                    <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
+                    <div
+                        ref={cardsRef}
+                        className={`bg-white shadow-lg rounded-lg p-6 flex flex-col items-center transform transition-transform duration-1000 ease-in-out ${cardsInView ? "transform translate-y-0 opacity-100" : "transform translate-y-10 opacity-0"
+                            } hover:scale-105 hover:
+                        } hover:scale-105 hover:shadow-xl`}
+                    >
                         <h2 className="text-lg font-bold text-gray-700">Appointments Today</h2>
                         <span className="text-4xl font-bold text-green-600 mt-4">85</span>
                         <p className="text-gray-500 mt-2">Scheduled Appointments</p>
                     </div>
 
-                    <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
+                    <div
+                        ref={cardsRef}
+                        className={`bg-white shadow-lg rounded-lg p-6 flex flex-col items-center transform transition-transform duration-1000 ease-in-out ${cardsInView ? "transform translate-y-0 opacity-100" : "transform translate-y-10 opacity-0"
+                            } hover:scale-105 hover:shadow-xl`}
+                    >
                         <h2 className="text-lg font-bold text-gray-700">Doctors Available</h2>
                         <span className="text-4xl font-bold text-yellow-600 mt-4">36</span>
                         <p className="text-gray-500 mt-2">On Duty</p>
                     </div>
 
-                    <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white shadow-lg rounded-lg flex justify-center items-center p-8">
+                    <div
+                        ref={chartRef}
+                        className={`col-span-1 md:col-span-2 lg:col-span-3 bg-white shadow-lg rounded-lg flex justify-center items-center p-8 transition-all duration-1000 ease-in-out ${chartInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                            }`}
+                    >
                         <div style={{ height: "400px", width: "100%", maxWidth: "800px" }}>
                             <Line data={chartData} options={chartOptions} />
                         </div>

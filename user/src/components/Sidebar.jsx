@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-    const navigate = useNavigate(); // Hook for navigation
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedFeature, setSelectedFeature] = useState(null);
+    const navigate = useNavigate();
+
     const features = [
         { title: "Data Demografi", icon: "person", path: "/DataPatient" },
         { title: "Pemeriksaan", icon: "science", path: "/pemeriksaan" },
@@ -11,9 +15,19 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     ];
 
     const handleNavigation = (feature) => {
-        if (window.confirm(`Apakah Anda ingin memasuki halaman ${feature.title}?`)) {
-            navigate(feature.path);
-        }
+        setSelectedFeature(feature);
+        setIsModalOpen(true);
+        setTimeout(() => setModalVisible(true), 50);
+    };
+
+    const closeModal = () => {
+        setModalVisible(false);
+        setTimeout(() => setIsModalOpen(false), 300);
+    };
+
+    const confirmNavigation = () => {
+        navigate(selectedFeature.path);
+        closeModal();
     };
 
     return (
@@ -48,6 +62,52 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     ))}
                 </nav>
             </div>
+
+            {/* Modal */}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div
+                        className={`bg-white rounded-lg p-6 shadow-lg w-96 transform transition-all duration-500 ease-out ${
+                            modalVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
+                        }`}
+                    >
+                        {/* Header with Icon */}
+                        <div className="flex items-center gap-4 mb-4">
+                            <span className="material-icons-outlined text-4xl text-blue-600">
+                                info
+                            </span>
+                            <h2 className="text-xl font-bold text-gray-800">
+                                Konfirmasi Navigasi
+                            </h2>
+                        </div>
+
+                        {/* Main Text */}
+                        <p className="text-gray-600 mb-6 text-lg leading-relaxed">
+                            Apakah Anda yakin ingin memasuki halaman{" "}
+                            <span className="font-extrabold text-blue-600 underline decoration-dotted">
+                                {selectedFeature?.title}
+                            </span>
+                            ? Pastikan data Anda sudah tersimpan sebelum melanjutkan.
+                        </p>
+
+                        {/* Buttons */}
+                        <div className="flex justify-end space-x-4">
+                            <button
+                                onClick={closeModal}
+                                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmNavigation}
+                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };

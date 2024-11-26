@@ -11,6 +11,7 @@ import {
     Legend,
 } from "chart.js";
 
+
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend);
 
 const WeeklyChart = ({ data, options }) => {
