@@ -9,6 +9,7 @@ import HomePage from "./Pages/HomePage";
 import DataPatient from "./Pages/DataPatient";
 import MedicalHistory from "./Pages/MedicalHistory";
 import Jadwal from "./Pages/Jadwal";
+import Pneumonia from "./Pages/PredictPneumoniaPage";  
 
 const NotFoundPage = () => {
   return (
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
   {
     path: "/Jadwal",
     element: <Jadwal />
+  },
+  {
+    path: "/predictPneumoniaPage",
+    element: <Pneumonia />
   }
 ]);
 
